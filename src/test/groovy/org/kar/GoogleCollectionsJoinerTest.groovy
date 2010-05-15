@@ -1,11 +1,10 @@
 package org.kar
 
-import org.testng.annotations.Test
-import org.unitils.inject.annotation.TestedObject
-import static org.testng.Assert.*
-import org.unitils.UnitilsTestNG
-
 import com.google.common.collect.ImmutableMultimap
+import org.testng.annotations.Test
+import org.unitils.UnitilsTestNG
+import org.unitils.inject.annotation.TestedObject
+import static org.testng.Assert.assertEquals
 
 /**
  * Test the capabilities of google-collections joiner next to the Groovy collections built-in join function.
@@ -52,6 +51,20 @@ public class GoogleCollectionsJoinerTest extends UnitilsTestNG
     }
 
     @Test
+    public void testMapJoinWithCustomSeparator()
+    {
+        String control = '1 is a and 2 is b and 3 is c'
+        def toJoin = [1: 'a', 2: 'b', 3: 'c']
+        def groovyVersion = toJoin.inject([]) {builder, entry ->
+            builder << "${entry.key} is ${entry.value}"
+            builder
+        }.join(' and ')
+        assertEquals(groovyVersion, control)
+
+        assertEquals (joiner.join(' and ', ' is ', toJoin), control)
+    }
+
+    @Test
     public void testMultimapJoin()
     {
         def builder = new ImmutableMultimap.Builder<String, Integer>()
@@ -64,9 +77,9 @@ public class GoogleCollectionsJoinerTest extends UnitilsTestNG
         }
 
         def build = builder.build()
-        println build
         build.keySet().each {
-            println joiner.join(build.get(it))
+            def value = build.get(it)
+            assertEquals(joiner.join(value)[1..-2], value.join(SEP) )
         }
 
     }
