@@ -2,7 +2,6 @@ package org.kar;
 
 import com.google.common.collect.*;
 import org.testng.annotations.*;
-import org.unitils.UnitilsTestNG;
 import org.unitils.inject.annotation.TestedObject;
 
 import java.util.*;
@@ -10,13 +9,13 @@ import java.util.*;
 /**
  * @author Kelly Robinson
  */
-public class JavaMultimapTest extends UnitilsTestNG
+public class JavaGoogleCollectionsMultimapTest
 {
-    @TestedObject
-    JavaMultimap map;
+     @TestedObject
+     Multimap<Object, Object> map = LinkedListMultimap.create();
 
     private final Random random = new Random();
-    
+
     @DataProvider(name = "multimaps")
     public Object[][] createData()
     {
@@ -30,7 +29,7 @@ public class JavaMultimapTest extends UnitilsTestNG
     }
 
     @Test(dataProvider = "multimaps")
-    public void testJavaEquivalentMultiMap(List<String> keys, long numberOfValues)
+    public void testMultiMap(List<String> keys, long numberOfValues)
     {
         long start = System.currentTimeMillis();
         for (String key : keys)
