@@ -15,8 +15,8 @@ class GroovyMultimap
      */
     public boolean put(Object key, Object value)
     {
-        def list = map.get(key, [])
-        list << value
+        List list = map.get(key, [])
+        list.add(value)
         map."$key" = list
     }
 
